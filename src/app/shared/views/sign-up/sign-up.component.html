@@ -1,0 +1,58 @@
+<a [routerLink]="['/Login']"><i class="bi bi-chevron-left"></i></a>
+<div class="w-100 h-100">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card w-25">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Registro</h5>
+
+                <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)" novalidate>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <input type="text" name="name" placeholder="Nombre(s)" class="form-control" #name="ngModel" [(ngModel)]="new_user.name" [ngClass]="{'is-invalid': name.touched && name.invalid}" pattern="^[a-zA-Z\s]+$" required>
+                            <div *ngIf="name.touched && name.invalid" class="text-danger">
+                                Introduce un nombre.
+                            </div>                         
+                        </div>
+                        <div class="col-6 mb-3">
+                            <input type="text" name="last_name" placeholder="Apellido(s)" class="form-control" #last_name="ngModel" [(ngModel)]="new_user.last_name" [ngClass]="{'is-invalid': last_name.touched && last_name.invalid}" pattern="^[a-zA-Z\s]+$" required>
+                            <div *ngIf="last_name.touched && last_name.invalid" class="text-danger">
+                                Introduce los apellidos.
+                            </div>
+                        </div>                        
+                        <div class="mb-3">
+                            <input type="date" name="birth_date" placeholder="Fecha de nacimiento" class="form-control" #birth_date="ngModel" [(ngModel)]="new_user.birth_date" [ngClass]="{'is-invalid': birth_date.touched && birth_date.invalid}" required>
+                            <div *ngIf="birth_date.touched && birth_date.invalid" class="text-danger">
+                                Introduce la fecha de nacimiento.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="username" placeholder="Nombre de usuario" class="form-control" #username="ngModel" [(ngModel)]="new_user.username" [ngClass]="{'is-invalid': username.touched && username.invalid}" pattern="^[a-zA-Z0-9\s]+$" required>
+                            <div *ngIf="username.touched && username.invalid" class="text-danger">
+                                Introduce un nombre de usuario.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" name="email" placeholder="Correo electrónico" class="form-control" #email="ngModel" [(ngModel)]="new_user.email" [ngClass]="{'is-invalid': email.touched && email.invalid}" required>
+                            <div *ngIf="email.touched && email.invalid" class="text-danger">
+                                Introduce un correo electrónico.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" name="password" placeholder="Contraseña" class="form-control" #password="ngModel" [(ngModel)]="new_user.password" [ngClass]="{'is-invalid': password.touched && password.invalid}" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;<>,.?~])[A-Za-z\d!@#$%^&*()_+={}\[\]:;<>,.?~]{8,}$" required>
+                            <div *ngIf="password.touched && password.invalid" class="text-danger">
+                                Introduce una contraseña.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="file" name="user_picture" placeholder="Foto de perfil" class="form-control" #user_picture="ngModel" [(ngModel)]="new_user.user_picture" required>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary w-100" >Registrarse</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
