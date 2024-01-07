@@ -1,1 +1,21 @@
-<a [routerLink]="['/SignUp']">Regístrate ahora</a>
+<div class="w-100 h-100">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card w-25">
+            <div class="card-body">
+                <h5 class="card-title">Inicio de sesión</h5>
+                <form #loginForm="ngForm" (ngSubmit)="login()" novalidate>
+                    <div class="mb-3">
+                        <input type="email" name="email" placeholder="Correo electrónico" class="form-control" #email="ngModel" [(ngModel)]="user.email" [ngClass]="{'is-invalid': email.touched && email.invalid}" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" name="password" placeholder="Contraseña" class="form-control" #password="ngModel" [(ngModel)]="user.password" [ngClass]="{'is-invalid': password.touched && password.invalid}" required>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+                    </div>
+                    <p>¿Aún no tienes una cuenta? </p> <a [routerLink]="['/SignUp']">Regístrate ahora</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

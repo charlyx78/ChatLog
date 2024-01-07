@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
+import { User } from 'src/app/models/User';
+
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -13,15 +15,7 @@ export class SignUpComponent implements OnInit {
   public new_user: any;
 
   constructor(private fireAuth: AngularFireAuth, private fireStore: AngularFirestore) {
-    this.new_user = {
-      "name": "",
-      "last_name": "",
-      "birth_date": "",
-      "username": "",
-      "email": "",
-      "password": "",
-      "user_picture": ""
-    };
+    this.new_user = new User("","","","","","","","","");
   }
 
   public signUp(form: any) {
@@ -29,15 +23,18 @@ export class SignUpComponent implements OnInit {
       this.new_user.name != "" &&
       this.new_user.last_name != "" &&
       this.new_user.birth_date != "" &&
+      this.new_user.gender != "" &&
       this.new_user.username != "" &&
       this.new_user.email != "" &&
       this.new_user.password != "" 
     ) {
       this.fireAuth.createUserWithEmailAndPassword(this.new_user.email, this.new_user.password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          this.fireStore.collection('Usuarios').add({user:this.new_user});
-          alert("Usuario registrado: " + user);
+        .then((userRegistrated) => {
+          let current_dateTime = new Date();
+          this.new_user.registration_date = current_dateTime;
+
+          this.fireStore.collection("Usuarios").doc(userRegistrated.user?.uid).set(this.new_user.toJSON());
+          alert("¡Usuario registrado exitosamente!");
           form.reset();
         })
         .catch((error) => {
