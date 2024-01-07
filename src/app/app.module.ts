@@ -14,12 +14,14 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { Environment } from './environments/environment';
 import { SignUpComponent } from './shared/views/sign-up/sign-up.component';
+import { HomeComponent } from './shared/views/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignUpComponent
+    SignUpComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

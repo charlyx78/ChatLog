@@ -3,11 +3,13 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { LoginComponent } from "./shared/views/login/login.component";
 import { SignUpComponent } from "./shared/views/sign-up/sign-up.component";
+import { HomeComponent } from "./shared/views/home/home.component";
 
 //array de configuracion de rutas
 const appRoutes: Routes = [
     {path: 'Login', component: LoginComponent},
-    {path: 'SignUp', component: SignUpComponent}
+    {path: 'SignUp', component: SignUpComponent},
+    {path: 'Home', component: HomeComponent}
 ];
 
 //Exportar el modulo del router
