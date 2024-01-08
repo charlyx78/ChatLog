@@ -10,12 +10,13 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'ChatLog';
 
-  public current_session = sessionStorage.getItem("CurrentSession");
+  public current_session: any;
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router
   ) {
+    this.current_session = sessionStorage.getItem("CurrentSession")
   }
 
   ngOnInit(): void {

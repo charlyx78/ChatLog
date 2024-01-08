@@ -1,11 +1,12 @@
-<a [routerLink]="['/Login']"><i class="bi bi-chevron-left"></i></a>
 <div class="w-100 h-100">
     <div class="d-flex justify-content-center align-items-center">
         <div class="card w-25">
             <div class="card-body">
-                <h5 class="card-title mb-3">Registro</h5>
-
-                <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)" novalidate>
+                <h5 class="card-title mb-3">
+                    <a [routerLink]="['/Login']" ngClass="text-dark"><i class="bi bi-chevron-left"></i></a>
+                    Registro
+                </h5>
+                <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)">
                     <div class="row">
                         <div class="col-6 mb-3">
                             <input type="text" name="name" placeholder="Nombre(s)" class="form-control" #name="ngModel" [(ngModel)]="new_user.name" [ngClass]="{'is-invalid': name.touched && name.invalid}" pattern="^[a-zA-Z\s]+$" required>

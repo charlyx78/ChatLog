@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
-import { User } from 'src/app/models/User';
+import { User } from '../../models/User';
+
+import { Session } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,11 +14,18 @@ import { User } from 'src/app/models/User';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-
   public new_user: any;
+  public current_session: any;
 
-  constructor(private fireAuth: AngularFireAuth, private fireStore: AngularFirestore) {
+  constructor(
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private fireAuth: AngularFireAuth, 
+    private fireStore: AngularFirestore,
+    private session_service: Session
+  ) {
     this.new_user = new User("","","","","","","","","");
+    this.current_session = this.session_service.getCurrentSession();
   }
 
   public signUp(form: any) {
@@ -38,7 +48,6 @@ export class SignUpComponent implements OnInit {
           form.reset();
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMessage = error.message;
           alert(errorMessage);
         });
@@ -49,6 +58,9 @@ export class SignUpComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.current_session) {
+      this._router.navigate(['/Home']);
+    }
   }
 
 }
