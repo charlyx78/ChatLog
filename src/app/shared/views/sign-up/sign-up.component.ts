@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-
 import { User } from '../../models/User';
+import { UserService } from '../../services/user/user.service';
 
-import { Session } from 'src/app/shared/services/session.service';
+import { SessionService } from '../../services/session/session.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,45 +14,30 @@ import { Session } from 'src/app/shared/services/session.service';
 export class SignUpComponent implements OnInit {
   public new_user: any;
   public current_session: any;
+  public date: Date = new Date();
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private fireAuth: AngularFireAuth, 
-    private fireStore: AngularFirestore,
-    private session_service: Session
+    private user_service: UserService,
+    private session_service: SessionService
   ) {
-    this.new_user = new User("","","","","","","","","");
-    this.current_session = this.session_service.getCurrentSession();
+    this.current_session = this.session_service.getSession();
+    this.new_user = new User("","",this.date,"","","","","",this.date);
   }
 
-  public signUp(form: any) {
-    if(
-      this.new_user.name != "" &&
-      this.new_user.last_name != "" &&
-      this.new_user.birth_date != "" &&
-      this.new_user.gender != "" &&
-      this.new_user.username != "" &&
-      this.new_user.email != "" &&
-      this.new_user.password != "" 
-    ) {
-      this.fireAuth.createUserWithEmailAndPassword(this.new_user.email, this.new_user.password)
-        .then((userRegistrated) => {
-          let current_dateTime = new Date();
-          this.new_user.registration_date = current_dateTime;
+  async signUp(form: any) {
+    this.new_user.user_picture = await this.user_service.addUserPicture(this.new_user.user_picture);
+    let is_user_registrated: boolean = await this.user_service.addUser(this.new_user);
+    if(is_user_registrated) {
+      form.reset();
+      this._router.navigate(['/Login']);
+    } 
+  }
 
-          this.fireStore.collection("Usuarios").doc(userRegistrated.user?.uid).set(this.new_user.toJSON());
-          alert("¡Usuario registrado exitosamente!");
-          form.reset();
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          alert(errorMessage);
-        });
-    }
-    else {
-      alert("Llena todos los campos para registrarte.");
-    }
+  selectedUserPicture(event: any) {
+    const user_picture: File = event.target.files[0];
+    this.new_user.user_picture = user_picture;
   }
 
   ngOnInit(): void {

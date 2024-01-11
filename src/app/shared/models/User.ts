@@ -1,24 +1,24 @@
 export class User {
     public name: string;
     public last_name: string;
-    public birth_date: string;
+    public birth_date: Date;
     public gender: string;
     public username: string;
     public email: string;
     public password: string;
-    public user_picture: string;
-    public registration_date: string;
+    public user_picture: any;
+    public registration_date: Date;
 
     constructor(
-        name:any,
-        last_name:any,
-        birth_date:any,
-        gender:any,
-        username:any,
-        email:any,
-        password:any,
-        user_picture:any = "",
-        registration_date:string
+        name:string,
+        last_name:string,
+        birth_date:Date,
+        gender:string,
+        username:string,
+        email:string,
+        password:string,
+        user_picture:any,
+        registration_date:Date
     ) {
         this.name = name;
         this.last_name = last_name;
@@ -30,18 +30,4 @@ export class User {
         this.user_picture = user_picture;
         this.registration_date = registration_date;
     }
-
-    toJSON() {
-        return {
-          name: this.name,
-          last_name: this.last_name,
-          birth_date: this.birth_date,
-          gender: this.gender,
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          user_picture: this.user_picture,
-          registration_date: this.registration_date        
-        }
-    };
 }

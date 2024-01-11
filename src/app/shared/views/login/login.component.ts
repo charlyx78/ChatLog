@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { User } from '../../models/User';
-import { Session } from 'src/app/shared/services/session.service';
+import { UserService } from '../../services/user/user.service';
 
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { SessionService } from '../../services/session/session.service';
 
 @Component({
   selector: 'app-login',
@@ -14,44 +14,25 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 export class LoginComponent implements OnInit {
   public user: any;
   public current_session: any;
+  public date: Date = new Date();
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private fireAuth: AngularFireAuth,
-    private session_service: Session
+    private user_service: UserService,
+    private session_service: SessionService
   ) {
-    this.user = new User("","","","","","","","","");
-    this.current_session = this.session_service.getCurrentSession();
+    this.user = new User("","",this.date,"","","","","",this.date);
+    this.current_session = this.session_service.getSession();
   }
 
-  public login() {
-    if(this.user.email != "" && this.user.password != "") {
-      this.fireAuth.signInWithEmailAndPassword(this.user.email, this.user.password)
-      .then((userLoged) => {
-        let user_id: any = userLoged.user?.uid;
-        this.session_service.setCurrentSession(user_id);
-        alert("¡Sesión iniciada, bienvenid@!");
-        this._router.navigate(['/Home']);
-        
-      })
-      .catch((error) => {
-        const error_code = error.code;
-        switch(error_code) {
-          case "auth/invalid-email":
-            alert("Por favor, asegurate de introducir un correo electrónico válido.");
-            break;
-          case "auth/invalid-login-credentials":
-            alert("Correo electrónico o contraseña incorrectos. Por favor, inténtalo de nuevo.");
-            break;
-          case "auth/too-many-requests":
-            alert("Has intentado iniciar sesión demasiadas veces. Por favor, inténtalo más tarde.");
-            break;
-        }
-      })
+  async login() {
+    try {
+      let is_user_loged: boolean = await this.user_service.login(this.user.email,this.user.password);
+      if(is_user_loged) this._router.navigate(['/Home']);
     }
-    else {
-      alert("Llena todos los campos para iniciar sesión.");
+    catch(error) {
+      alert(error);
     }
   }
 

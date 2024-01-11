@@ -4,8 +4,10 @@ import { routing, appRoutingProviders } from './app.routing';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './shared/views/login/login.component';
+import { HomeComponent } from './shared/views/home/home.component';
 
 //Firebase
 import { AngularFireModule } from '@angular/fire/compat';
@@ -14,14 +16,17 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { Environment } from './environments/environment';
 import { SignUpComponent } from './shared/views/sign-up/sign-up.component';
-import { HomeComponent } from './shared/views/home/home.component';
+import { NavbarComponent } from './shared/views/navbar/navbar.component';
+import { SideMenuComponent } from './shared/views/side-menu/side-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignUpComponent,
-    HomeComponent
+    HomeComponent,
+    NavbarComponent,
+    SideMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,7 @@ import { HomeComponent } from './shared/views/home/home.component';
     AngularFireStorageModule
   ],
   providers: [
-    appRoutingProviders
+    appRoutingProviders,
   ],
   bootstrap: [AppComponent]
 })

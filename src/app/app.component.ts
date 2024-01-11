@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router
   ) {
-    this.current_session = sessionStorage.getItem("CurrentSession")
+    this.current_session = sessionStorage.getItem("CurrentSession");
   }
 
   ngOnInit(): void {

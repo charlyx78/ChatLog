@@ -5,11 +5,11 @@ import { UserService } from '../../services/user/user.service';
 import { SessionService } from '../../services/session/session.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class NavbarComponent implements OnInit {
   public current_session: any;
   public user_logged: any;
 
@@ -18,17 +18,19 @@ export class HomeComponent implements OnInit {
     private _router: Router,
     private user_service: UserService,
     private session_service: SessionService
-  ) { 
+  ) {
     this.current_session = this.session_service.getSession();
     this.user_service.getUserById(this.current_session).then((user) => {
       this.user_logged = user;
     });
   }
 
+  public logOut() {
+    this.session_service.removeSession();
+    this._router.navigate(['/Login']);
+  }
+
   ngOnInit(): void {
-    if(!this.current_session) {
-      this._router.navigate(['/Login']);
-    }
   }
 
 }
