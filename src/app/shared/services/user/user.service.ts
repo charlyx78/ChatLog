@@ -21,34 +21,20 @@ export class UserService {
 
   public addUser(user: User) {
     return new Promise<boolean>((resolve, reject) => {
-      if(
-        user.name != "" &&
-        user.last_name != "" &&
-        user.birth_date != null &&
-        user.gender != "" &&
-        user.username != "" &&
-        user.email != "" &&
-        user.password != "" 
-      ) {
-        this.fireAuth.createUserWithEmailAndPassword(user.email, user.password)
-          .then((userRegistrated) => {
-            let current_dateTime = new Date();
-            user.registration_date = current_dateTime;
+      this.fireAuth.createUserWithEmailAndPassword(user.email, user.password)
+        .then((userRegistrated) => {
+          let current_dateTime = new Date();
+          user.registration_date = current_dateTime;
 
-            this.fireStore.collection("Usuarios").doc(userRegistrated.user?.uid).set(this.serializeUser(user));
-            alert("¡Usuario registrado exitosamente!");
-            resolve(true);
-          })
-          .catch((error) => {
-            const errorMessage = error.message;
-            alert(errorMessage);
-            resolve(false);
-          });
-      }
-      else {
-        alert("Llena todos los campos para registrarte.");
-        resolve(false);
-      }
+          this.fireStore.collection("Usuarios").doc(userRegistrated.user?.uid).set(this.serializeUser(user));
+          alert("¡Usuario registrado exitosamente!");
+          resolve(true);
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert(errorMessage);
+          resolve(false);
+        });
     })
   }
 
@@ -103,6 +89,30 @@ export class UserService {
         resolve(user.data());
       });
     }) 
+  }
+
+  public updateUser(user_id: string, user: User) {
+    return new Promise<boolean>((resolve, reject) => {
+      this.fireStore.collection("Usuarios").doc(user_id).update(user) 
+        .then((success) => {
+          resolve(true);
+        })
+        .catch((error) => {
+          resolve(false);
+        })
+    })
+  }
+
+  public updateUserPicture(user_id: string, file_path: string) {
+    return new Promise<boolean>((resolve, reject) => {
+      this.fireStore.collection("Usuarios").doc(user_id).update({"user_picture": file_path}) 
+        .then((success) => {
+          resolve(true);
+        })
+        .catch((error) => {
+          resolve(false);
+        })
+    })
   }
 
   public serializeUser(user: User) {

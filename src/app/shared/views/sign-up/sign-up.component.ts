@@ -15,6 +15,7 @@ export class SignUpComponent implements OnInit {
   public new_user: any;
   public current_session: any;
   public date: Date = new Date();
+  public confirmed_password: any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -24,15 +25,34 @@ export class SignUpComponent implements OnInit {
   ) {
     this.current_session = this.session_service.getSession();
     this.new_user = new User("","",this.date,"","","","","",this.date);
+    this.confirmed_password = "";
   }
 
   async signUp(form: any) {
-    this.new_user.user_picture = await this.user_service.addUserPicture(this.new_user.user_picture);
-    let is_user_registrated: boolean = await this.user_service.addUser(this.new_user);
-    if(is_user_registrated) {
-      form.reset();
-      this._router.navigate(['/Login']);
-    } 
+    try {
+      if(
+        this.new_user.name != "" &&
+        this.new_user.last_name != "" &&
+        this.new_user.birth_date != null &&
+        this.new_user.gender != "" &&
+        this.new_user.username != "" &&
+        this.new_user.email != "" &&
+        this.new_user.password != "" && this.new_user.password == this.confirmed_password 
+      ) {
+        this.new_user.user_picture = await this.user_service.addUserPicture(this.new_user.user_picture);
+        let is_user_registrated: boolean = await this.user_service.addUser(this.new_user);
+        if(is_user_registrated) {
+          form.reset();
+          this._router.navigate(['/Login']);
+        }       
+      }
+      else {
+        alert("Llena todos los campos correctamente para continuar.");
+      }
+    }
+    catch(error) {
+      alert(error);
+    }
   }
 
   selectedUserPicture(event: any) {

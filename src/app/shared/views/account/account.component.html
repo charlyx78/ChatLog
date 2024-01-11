@@ -1,0 +1,88 @@
+<div class="container d-flex justify-content-center w-50" *ngIf="user_logged">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Información de la cuenta</h5>
+                    <p class="card-subtitle text-secondary mb-4">Aquí puedes visualizar y actualizar la información de tu cuenta.</p>                   
+                    <form #updateUserPictureForm="ngForm" (ngSubmit)="updateUserPicture(updateUserPictureForm)">
+                        <div class="d-flex align-items-end gap-3">
+                            <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(' + user_logged.user_picture + ')'}">
+                                <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;"><i class="bi bi-x-lg"></i></button>
+                            </div>
+                            <div>
+                                <label for="user_picture" class="form-label">Foto de perfil</label>
+                                <input type="file" name="user_picture" placeholder="Foto de perfil" class="form-control mb-2" (change)="selectedUserPicture($event)" required>
+                                <button type="submit" class="btn btn-outline-secondary">Guardar foto</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr class="border">
+                    <form #updateAccountForm="ngForm" (ngSubmit)="updateAccount(updateAccountForm)">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="name" class="form-label">Nombre(s)</label>
+                                <input type="text" name="name" placeholder="Nombre(s)" class="form-control" #name="ngModel" [(ngModel)]="user_logged.name" [ngClass]="{'is-invalid': name.touched && name.invalid}" required>
+                                <div *ngIf="name.touched && name.invalid" class="text-danger">
+                                    Formato de nombre inválido. Este campo solo acepta letras.
+                                </div>                         
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="last_name" class="form-label">Apellido(s)</label>
+                                <input type="text" name="last_name" placeholder="Apellido(s)" class="form-control" #last_name="ngModel" [(ngModel)]="user_logged.last_name" [ngClass]="{'is-invalid': last_name.touched && last_name.invalid}" required>
+                                <div *ngIf="last_name.touched && last_name.invalid" class="text-danger">
+                                    Formato de apellidos inválido. Este campo solo acepta letras.
+                                </div>     
+                            </div>                        
+                            <div class="col-6 mb-3">
+                                <label for="birth_date" class="form-label">Fecha de nacimiento</label>
+                                <input type="date" name="birth_date" placeholder="Fecha de nacimiento" class="form-control" #birth_date="ngModel" [(ngModel)]="user_logged.birth_date" [ngClass]="{'is-invalid': birth_date.touched && birth_date.invalid}" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="gender" class="form-label">Género</label>
+                                <select name="gender" #gender="ngModel" class="form-control" [(ngModel)]="user_logged.gender" [ngClass]="{'is-invalid': birth_date.touched && birth_date.invalid}" required>
+                                    <option value="">--Selecciona un género</option>
+                                    <option value="Hombre">Hombre</option>
+                                    <option value="Mujer">Mujer</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Nombre de usuario</label>
+                                <input type="text" name="username" placeholder="Nombre de usuario" class="form-control" #username="ngModel" [(ngModel)]="user_logged.username" [ngClass]="{'is-invalid': username.touched && username.invalid}" required>
+                                <div *ngIf="username.touched && username.invalid" class="text-danger">
+                                    Formato de nombre de usuario inválido. Este campo solo acepta letras y números.
+                                </div>     
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <input type="email" name="email" placeholder="Correo electrónico" class="form-control" #email="ngModel" [(ngModel)]="user_logged.email" [ngClass]="{'is-invalid': email.touched && email.invalid}" required disabled="dis">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" name="password" placeholder="Contraseña" class="form-control" #password="ngModel" [(ngModel)]="user_logged.password" [ngClass]="{'is-invalid': password.touched && password.invalid}" required>
+                                <div *ngIf="password.touched && password.invalid" class="text-danger">
+                                    Formato de contraseña inválido. Asegúrate de que tu contraseña incluya al menos 8 caracteres, un número, y un símbolo.
+                                </div>     
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="confirmed_password" class="form-label">Confirmar contraseña</label>
+                                <input type="password" name="confirmed_password" placeholder="Confirmar contraseña" class="form-control" [(ngModel)]="confirmed_password" [ngClass]="{'is-invalid': confirmed_password != '' && confirmed_password != user_logged.password}" required>
+                                <div *ngIf="confirmed_password != '' && confirmed_password != user_logged.password" class="text-danger">
+                                    Las contraseñas no coinciden.
+                                </div>     
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-4 d-flex flex-column align-items-center">
+            <h5 class="mb-3">Foto de perfil</h5>
+            <div class="user-picture-account-page-class border mb-2" [ngStyle]="{'background-image': 'url(' + user_logged.user_picture + ')'}"></div>
+            <p class="text-center text-secondary">Usuario desde {{ user_logged.registration_date.toDate() | date:"dd/MM/yyyy" }}</p>
+        </div> -->
+    </div>
+</div>

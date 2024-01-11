@@ -18,6 +18,7 @@ import { Environment } from './environments/environment';
 import { SignUpComponent } from './shared/views/sign-up/sign-up.component';
 import { NavbarComponent } from './shared/views/navbar/navbar.component';
 import { SideMenuComponent } from './shared/views/side-menu/side-menu.component';
+import { AccountComponent } from './shared/views/account/account.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SideMenuComponent } from './shared/views/side-menu/side-menu.component'
     SignUpComponent,
     HomeComponent,
     NavbarComponent,
-    SideMenuComponent
+    SideMenuComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,

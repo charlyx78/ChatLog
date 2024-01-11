@@ -9,21 +9,25 @@
                 <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)">
                     <div class="row">
                         <div class="col-6 mb-3">
+                            <label for="name" class="form-label">Nombre(s)</label>
                             <input type="text" name="name" placeholder="Nombre(s)" class="form-control" #name="ngModel" [(ngModel)]="new_user.name" [ngClass]="{'is-invalid': name.touched && name.invalid}" pattern="^[a-zA-Z\s]+$" required>
                             <div *ngIf="name.touched && name.invalid" class="text-danger">
                                 Formato de nombre inválido. Este campo solo acepta letras.
                             </div>                         
                         </div>
                         <div class="col-6 mb-3">
+                            <label for="last_name" class="form-label">Apellido(s)</label>
                             <input type="text" name="last_name" placeholder="Apellido(s)" class="form-control" #last_name="ngModel" [(ngModel)]="new_user.last_name" [ngClass]="{'is-invalid': last_name.touched && last_name.invalid}" pattern="^[a-zA-Z\s]+$" required>
                             <div *ngIf="last_name.touched && last_name.invalid" class="text-danger">
                                 Formato de apellidos inválido. Este campo solo acepta letras.
                             </div>     
                         </div>                        
-                        <div class="mb-3">
+                        <div class="col-6 mb-3">
+                            <label for="birth_date" class="form-label">Fecha de nacimiento</label>
                             <input type="date" name="birth_date" placeholder="Fecha de nacimiento" class="form-control" #birth_date="ngModel" [(ngModel)]="new_user.birth_date" [ngClass]="{'is-invalid': birth_date.touched && birth_date.invalid}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-6 mb-3">
+                            <label for="gender" class="form-label">Género</label>
                             <select name="gender" #gender="ngModel" class="form-control" [(ngModel)]="new_user.gender" [ngClass]="{'is-invalid': birth_date.touched && birth_date.invalid}" required>
                                 <option value="">--Selecciona un género</option>
                                 <option value="Hombre">Hombre</option>
@@ -31,21 +35,32 @@
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de usuario</label>
                             <input type="text" name="username" placeholder="Nombre de usuario" class="form-control" #username="ngModel" [(ngModel)]="new_user.username" [ngClass]="{'is-invalid': username.touched && username.invalid}" pattern="^[a-zA-Z0-9\s]+$" required>
                             <div *ngIf="username.touched && username.invalid" class="text-danger">
                                 Formato de nombre de usuario inválido. Este campo solo acepta letras y números.
                             </div>     
                         </div>
                         <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico</label>
                             <input type="email" name="email" placeholder="Correo electrónico" class="form-control" #email="ngModel" [(ngModel)]="new_user.email" [ngClass]="{'is-invalid': email.touched && email.invalid}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-6 mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
                             <input type="password" name="password" placeholder="Contraseña" class="form-control" #password="ngModel" [(ngModel)]="new_user.password" [ngClass]="{'is-invalid': password.touched && password.invalid}" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;<>,.?~])[A-Za-z\d!@#$%^&*()_+={}\[\]:;<>,.?~]{8,}$" required>
                             <div *ngIf="password.touched && password.invalid" class="text-danger">
                                 Formato de contraseña inválido. Asegúrate de que tu contraseña incluya al menos 8 caracteres, un número, y un símbolo.
                             </div>     
                         </div>
+                        <div class="col-6 mb-3">
+                            <label for="confirmed_password" class="form-label">Confirmar contraseña</label>
+                            <input type="password" name="confirmed_password" placeholder="Confirmar contraseña" class="form-control" [(ngModel)]="confirmed_password" [ngClass]="{'is-invalid': confirmed_password != '' && confirmed_password != new_user.password}" required>
+                            <div *ngIf="confirmed_password != '' && confirmed_password != new_user.password" class="text-danger">
+                                Las contraseñas no coinciden.
+                            </div>     
+                        </div>
                         <div class="mb-3">
+                            <label for="user_picture" class="form-label">Foto de perfil</label>
                             <input type="file" name="user_picture" placeholder="Foto de perfil" class="form-control" (change)="selectedUserPicture($event)" required>
                         </div>
                         <div>
