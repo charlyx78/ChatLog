@@ -22,14 +22,19 @@ export class LoginComponent implements OnInit {
     private user_service: UserService,
     private session_service: SessionService
   ) {
-    this.user = new User("","",this.date,"","","","","",this.date);
+    this.user = new User("","",this.date,"","","","","","",this.date);
     this.current_session = this.session_service.getSession();
   }
 
   async login() {
     try {
-      let is_user_loged: boolean = await this.user_service.login(this.user.email,this.user.password);
-      if(is_user_loged) this._router.navigate(['/Home']);
+      await this.user_service.login(this.user.email,this.user.password).then((logged) => {
+        if(logged.is_user_logged) {
+          this.user_service.setUserStatusConnection(logged.user_id, "Connected");
+          this._router.navigate(['/Home']);
+        } 
+      });
+        
     }
     catch(error) {
       alert(error);

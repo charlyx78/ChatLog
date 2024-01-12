@@ -11,7 +11,6 @@ import { SessionService } from '../../services/session/session.service';
 })
 export class HomeComponent implements OnInit {
   public current_session: any;
-  public user_logged: any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -20,9 +19,6 @@ export class HomeComponent implements OnInit {
     private session_service: SessionService
   ) { 
     this.current_session = this.session_service.getSession();
-    this.user_service.getUserById(this.current_session).then((user) => {
-      this.user_logged = user;
-    });
   }
 
   ngOnInit(): void {

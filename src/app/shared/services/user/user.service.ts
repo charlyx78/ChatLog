@@ -4,6 +4,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
+import { Observable, from } from 'rxjs';
+
 import { SessionService } from '../session/session.service';
 
 @Injectable({
@@ -50,15 +52,18 @@ export class UserService {
     })
   }
 
-  public login(email:string, password: any): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+  public login(email:string, password: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
         if(email != "" && password != "") {
           this.fireAuth.signInWithEmailAndPassword(email, password)
             .then((userLoged) => {
                 let user_id: any = userLoged.user?.uid;
                 this.session_service.addSession(user_id);
                 alert("¡Sesión iniciada, bienvenid@!");            
-                resolve(true);
+                resolve({
+                  'is_user_logged': true,
+                  'user_id': user_id
+                });
             })
             .catch((error) => {
                 const error_code = error.code;
@@ -73,12 +78,18 @@ export class UserService {
                     alert("Has intentado iniciar sesión demasiadas veces. Por favor, inténtalo más tarde.");
                     break;
                 }
-                resolve(false);
+                resolve({
+                  'is_user_logged': false,
+                  'user_id': ''
+                });
             })
         }
         else {
           alert("Llena todos los campos para iniciar sesión.");
-          resolve(false);
+          resolve({
+            'is_user_logged': false,
+            'user_id': ''
+          });
         }
     })
   }
@@ -115,6 +126,18 @@ export class UserService {
     })
   }
 
+  public setUserStatusConnection(user_id: string, status_connection: string) {
+    return new Promise<boolean>((resolve, reject) => {
+      this.fireStore.collection("Usuarios").doc(user_id).update({"status_connection": status_connection}) 
+        .then((success) => {
+          resolve(true);
+        })
+        .catch((error) => {
+          resolve(false);
+        })
+    })
+  }
+
   public serializeUser(user: User) {
       return {
           name: user.name,
@@ -125,6 +148,7 @@ export class UserService {
           email: user.email,
           password: user.password,
           user_picture: user.user_picture,
+          status_connection: user.status_connection,
           registration_date: user.registration_date        
       }
   }

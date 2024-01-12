@@ -24,7 +24,7 @@ export class SignUpComponent implements OnInit {
     private session_service: SessionService
   ) {
     this.current_session = this.session_service.getSession();
-    this.new_user = new User("","",this.date,"","","","","",this.date);
+    this.new_user = new User("","",this.date,"","","","","","Desconectado",this.date);
     this.confirmed_password = "";
   }
 

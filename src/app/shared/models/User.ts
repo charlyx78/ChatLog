@@ -7,6 +7,7 @@ export class User {
     public email: string;
     public password: string;
     public user_picture: any;
+    public status_connection: string;
     public registration_date: Date;
 
     constructor(
@@ -18,6 +19,7 @@ export class User {
         email:string,
         password:string,
         user_picture:any,
+        status_connection:string,
         registration_date:Date
     ) {
         this.name = name;
@@ -28,6 +30,7 @@ export class User {
         this.email = email;
         this.password = password;
         this.user_picture = user_picture;
+        this.status_connection = status_connection;
         this.registration_date = registration_date;
     }
 }

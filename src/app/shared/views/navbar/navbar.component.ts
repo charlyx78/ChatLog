@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit {
   }
 
   public logOut() {
+    this.user_service.setUserStatusConnection(this.current_session, "Disconnected");
     this.session_service.removeSession();
     this._router.navigate(['/Login']);
   }

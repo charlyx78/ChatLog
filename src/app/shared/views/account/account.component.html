@@ -1,18 +1,25 @@
-<div class="container d-flex justify-content-center w-50" *ngIf="user_logged">
+<div class="container d-flex justify-content-center" *ngIf="user_logged">
     <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
+        <div class="col-8">
+            <div class="card border-0">
+                <div class="card-body p-0">
                     <h5 class="card-title">Información de la cuenta</h5>
                     <p class="card-subtitle text-secondary mb-4">Aquí puedes visualizar y actualizar la información de tu cuenta.</p>                   
                     <form #updateUserPictureForm="ngForm" (ngSubmit)="updateUserPicture(updateUserPictureForm)">
                         <div class="d-flex align-items-end gap-3">
-                            <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(' + user_logged.user_picture + ')'}">
-                                <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;"><i class="bi bi-x-lg"></i></button>
-                            </div>
+                            <div *ngIf="user_logged.user_picture; then image_uploaded else empty_image"></div>
+                            <ng-template #image_uploaded>
+                                <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(' + user_logged.user_picture + ')'}">
+                                    <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;" title="Eliminar foto de perfil"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </ng-template>
+                            <ng-template #empty_image>
+                                <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(../../../../assets/img/avatar.jpg)'}">
+                                    <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;" title="Eliminar foto de perfil"><i class="bi bi-x-lg"></i></button>
+                                </div>                            </ng-template>
                             <div>
                                 <label for="user_picture" class="form-label">Foto de perfil</label>
-                                <input type="file" name="user_picture" placeholder="Foto de perfil" class="form-control mb-2" (change)="selectedUserPicture($event)" required>
+                                <input type="file" name="user_picture" placeholder="Foto de perfil" class="form-control mb-2" (change)="selectedUserPicture($event)" accept=".jpg,.png,.jpeg" required>
                                 <button type="submit" class="btn btn-outline-secondary">Guardar foto</button>
                             </div>
                         </div>
@@ -64,7 +71,7 @@
                                     Formato de contraseña inválido. Asegúrate de que tu contraseña incluya al menos 8 caracteres, un número, y un símbolo.
                                 </div>     
                             </div>
-                            <div class="col-6 mb-3">
+                            <div class="col-6 mb-4">
                                 <label for="confirmed_password" class="form-label">Confirmar contraseña</label>
                                 <input type="password" name="confirmed_password" placeholder="Confirmar contraseña" class="form-control" [(ngModel)]="confirmed_password" [ngClass]="{'is-invalid': confirmed_password != '' && confirmed_password != user_logged.password}" required>
                                 <div *ngIf="confirmed_password != '' && confirmed_password != user_logged.password" class="text-danger">
@@ -72,7 +79,7 @@
                                 </div>     
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+                                <button type="submit" class="btn btn-primary">Guardar datos</button>
                             </div>
                         </div>
                     </form>
