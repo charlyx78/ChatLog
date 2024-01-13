@@ -19,6 +19,8 @@ import { SignUpComponent } from './shared/views/sign-up/sign-up.component';
 import { NavbarComponent } from './shared/views/navbar/navbar.component';
 import { SideMenuComponent } from './shared/views/side-menu/side-menu.component';
 import { AccountComponent } from './shared/views/account/account.component';
+import { ChatComponent } from './shared/views/chat/chat.component';
+import { FriendsChatsComponent } from './shared/views/friends-chats/friends-chats.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { AccountComponent } from './shared/views/account/account.component';
     HomeComponent,
     NavbarComponent,
     SideMenuComponent,
-    AccountComponent
+    AccountComponent,
+    ChatComponent,
+    FriendsChatsComponent
   ],
   imports: [
     BrowserModule,

@@ -14,6 +14,7 @@ export class AccountComponent implements OnInit {
   public user_logged: any;
   public confirmed_password: string;
   public is_file_selected: boolean;
+  private aux_file_selected: any;
 
   constructor(
     private session_service: SessionService,
@@ -41,7 +42,7 @@ export class AccountComponent implements OnInit {
       ) {
         let is_user_updated: boolean = await this.user_service.updateUser(this.current_user, this.user_service.serializeUser(this.user_logged));
         if(is_user_updated) {
-          alert("Información del usuario actualizada correctamente.")
+          alert("Información del usuario actualizada correctamente.");
         }       
       }
       else {
@@ -56,8 +57,7 @@ export class AccountComponent implements OnInit {
   async updateUserPicture(form: any) {
     try {
       if(this.is_file_selected) {
-        this.user_logged.user_picture = await this.user_service.addUserPicture(this.user_logged.user_picture);
-        console.log(this.user_logged.user_picture)
+        this.user_logged.user_picture = await this.user_service.addUserPicture(this.aux_file_selected);
         let is_user_picture_updated: boolean = await this.user_service.updateUserPicture(this.current_user, this.user_logged.user_picture);
         if(is_user_picture_updated) {
           alert("Foto de perfil actualizada.");
@@ -93,7 +93,7 @@ export class AccountComponent implements OnInit {
   selectedUserPicture(event: any) {
     const user_picture: File = event.target.files[0];
     if(user_picture) {
-      this.user_logged.user_picture = user_picture;
+      this.aux_file_selected = user_picture;
       this.is_file_selected = true;
     }
   }

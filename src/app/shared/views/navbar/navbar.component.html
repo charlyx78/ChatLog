@@ -16,20 +16,23 @@
                     <a class="nav-link dropdown-toggle text-dark d-flex justify-content-center align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" *ngIf="user_logged">
                         <div class="position-relative me-2">
                             <div *ngIf="user_logged.user_picture; then image_uploaded else empty_image"></div>
+
                             <ng-template #image_uploaded>
                                 <img src="{{ user_logged.user_picture }}" class="rounded-circle" width="30px" height="30px" alt="user picture">
                             </ng-template>
+
                             <ng-template #empty_image>
                                 <img src="../../../../assets/img/avatar.jpg" class="rounded-circle" width="30px" height="30px" alt="user picture">
                             </ng-template>
+
                             <div *ngIf="user_logged.status_connection; then connected else disconnected"></div>
                             <ng-template #connected>
                                 <span class="position-absolute top-0 start-100 translate-middle p-2 rounded-circle bg-success" title="Conectad@"></span>  
                             </ng-template>
+
                             <ng-template #disconnected>
                                 <span class="position-absolute top-0 start-100 translate-middle p-2 rounded-circle bg-danger" title="Desconectad@"></span>  
-                            </ng-template>
-                          
+                            </ng-template>           
                         </div>
                         {{ user_logged.username }}
                     </a>
