@@ -1,5 +1,6 @@
 <div class="container d-flex justify-content-center py-4">
-    <div *ngIf="user_logged; then account_view else loading_view"></div>
+    <div *ngIf="user_view; then account_view else loading_view"></div>
+
     <ng-template #loading_view>
         <div class="spinner-grow mt-5" style="width: 3rem; height: 3rem;" role="status">
             <span class="visually-hidden">Cargando, por favor espera...</span>
@@ -9,28 +10,50 @@
     <ng-template #account_view>
         <div class="card w-50 my-0 mx-auto">
             <div class="card-body">
+
                 <h5 class="card-title">Información de la cuenta</h5>
-                <p class="card-subtitle text-secondary mb-4">Aquí puedes visualizar y actualizar la información de tu cuenta.</p>                   
+                <p class="card-subtitle text-secondary mb-4" *ngIf="user_view_id == current_session">Aquí puedes visualizar y actualizar la información de tu cuenta.</p>   
+                
+                <hr class="border">
+
                 <form #updateUserPictureForm="ngForm" (ngSubmit)="updateUserPicture(updateUserPictureForm)">
                     <div class="d-flex align-items-end gap-3">
-                        <div *ngIf="user_logged.user_picture; then image_uploaded else empty_image"></div>
+                        <div *ngIf="user_view.user_picture; then image_uploaded else empty_image"></div>
 
                         <ng-template #image_uploaded>
-                            <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(' + user_logged.user_picture + ')'}">
-                                <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;" title="Eliminar foto de perfil"><i class="bi bi-x-lg"></i></button>
+                            <div>
+                                <p>Foto de perfil</p>
+                                <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(' + user_view.user_picture + ')'}">
+                                    <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;" title="Eliminar foto de perfil" *ngIf="user_view_id == current_session"><i class="bi bi-x-lg"></i></button>
+                                </div>
                             </div>
                         </ng-template>
 
                         <ng-template #empty_image>
-                            <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(../../../../assets/img/avatar.jpg)'}">
-                                <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;" title="Eliminar foto de perfil"><i class="bi bi-x-lg"></i></button>
-                            </div>                            
+                            <div>
+                                <p>Foto de perfil</p>
+                                <div class="user-picture-account-page-class border position-relative" [ngStyle]="{'background-image': 'url(../../../../assets/img/avatar.jpg)'}">
+                                    <button type="button" class="btn btn-secondary position-absolute m-1" (click)="deleteUserPicture()" style="right: 0;" title="Eliminar foto de perfil" *ngIf="user_view_id == current_session"><i class="bi bi-x-lg"></i></button>
+                                </div>                            
+                            </div>
                         </ng-template>
                         
-                        <div>
-                            <label for="user_picture" class="form-label">Foto de perfil</label>
-                            <input type="file" name="user_picture" placeholder="Foto de perfil" class="form-control mb-2" (change)="selectedUserPicture($event)" accept=".jpg,.png,.jpeg" required>
+                        <div *ngIf="user_view_id == current_session">
+                            <label for="user_picture" class="form-label">Sube tu foto de perfil</label>
+                            <input 
+                            type="file" 
+                            name="user_picture" 
+                            placeholder="Foto de perfil" 
+                            class="form-control mb-2" 
+                            (change)="selectedUserPicture($event)" 
+                            accept=".jpg,.png,.jpeg" 
+                            [required]="true">
                             <button type="submit" class="btn btn-outline-secondary">Guardar foto</button>
+                        </div>
+
+                        <div *ngIf="user_view_id != current_session" class="d-flex flex-column gap-2">
+                            <button class="btn btn-primary">Agregar amigo <i class="bi bi-person-add ms-2"></i></button>
+                            <button class="btn btn-primary">Enviar mensaje <i class="bi bi-chat-text ms-2"></i></button>
                         </div>
                     </div>
                 </form>
@@ -47,10 +70,13 @@
                             placeholder="Nombre(s)" 
                             class="form-control" 
                             #name="ngModel"
-                            [(ngModel)]="user_logged.name"
-                            [ngClass]="{'is-invalid': (user_logged.name.touched || user_logged.name.dirty) && user_logged.name.invalid}" 
-                            required>
-                            <div *ngIf="(user_logged.name.touched || user_logged.name.dirty) && user_logged.name.invalid" class="text-danger">
+                            [(ngModel)]="user_view.name"
+                            [maxlength]="30"
+                            [ngClass]="{'is-invalid': (user_view.name.touched || user_view.name.dirty) && user_view.name.invalid}" 
+                            [readOnly]="user_view_id != current_session"
+                            [disabled]="user_view_id != current_session"
+                            [required]="true">
+                            <div *ngIf="(user_view.name.touched || user_view.name.dirty) && user_view.name.invalid" class="text-danger">
                                 Formato de nombre inválido. Este campo solo acepta letras.
                             </div>                         
                         </div>
@@ -62,10 +88,13 @@
                             placeholder="Apellido(s)"
                             class="form-control"
                             #last_name="ngModel"
-                            [(ngModel)]="user_logged.last_name"
-                            [ngClass]="{'is-invalid': (user_logged.last_name.touched || user_logged.last_name.dirty) && user_logged.last_name.invalid}" 
-                            required>
-                            <div *ngIf="(user_logged.last_name.touched || user_logged.last_name.dirty) && user_logged.last_name.invalid" class="text-danger">
+                            [(ngModel)]="user_view.last_name"
+                            [maxlength]="30"
+                            [ngClass]="{'is-invalid': (user_view.last_name.touched || user_view.last_name.dirty) && user_view.last_name.invalid}" 
+                            [readOnly]="user_view_id != current_session"
+                            [disabled]="user_view_id != current_session"
+                            [required]="true">
+                            <div *ngIf="(user_view.last_name.touched || user_view.last_name.dirty) && user_view.last_name.invalid" class="text-danger">
                                 Formato de apellidos inválido. Este campo solo acepta letras.
                             </div>     
                         </div>         
@@ -77,8 +106,10 @@
                             placeholder="Fecha de nacimiento" 
                             class="form-control" 
                             #birth_date="ngModel"
-                            [(ngModel)]="user_logged.birth_date"
-                            [ngClass]="{'is-invalid': (user_logged.birth_date.touched || user_logged.birth_date.dirty) && user_logged.birth_date.invalid}" 
+                            [(ngModel)]="user_view.birth_date"
+                            [ngClass]="{'is-invalid': (user_view.birth_date.touched || user_view.birth_date.dirty) && user_view.birth_date.invalid}" 
+                            [readOnly]="user_view_id != current_session"
+                            [disabled]="user_view_id != current_session"
                             required>
                         </div>
 
@@ -88,9 +119,10 @@
                             name="gender"
                             class="form-control"  
                             #gender="ngModel"
-                            [(ngModel)]="user_logged.gender"
-                            [ngClass]="{'is-invalid': (user_logged.gender.touched || user_logged.gender.dirty) && user_logged.gender.invalid}" 
-                            required>
+                            [(ngModel)]="user_view.gender"
+                            [ngClass]="{'is-invalid': (user_view.gender.touched || user_view.gender.dirty) && user_view.gender.invalid}" 
+                            [disabled]="user_view_id != current_session"
+                            [required]="true">
                                 <option value="">--Selecciona un género</option>
                                 <option value="Hombre">Hombre</option>
                                 <option value="Mujer">Mujer</option>
@@ -104,15 +136,18 @@
                             placeholder="Nombre de usuario" 
                             class="form-control" 
                             #username="ngModel"
-                            [(ngModel)]="user_logged.username"
-                            [ngClass]="{'is-invalid': (user_logged.username.touched || user_logged.username.dirty) && user_logged.username.invalid}" 
-                            required>
-                            <div *ngIf="(user_logged.username.touched || user_logged.username.dirty) && user_logged.username.invalid" class="text-danger">
+                            [(ngModel)]="user_view.username"
+                            [maxlength]="20"
+                            [ngClass]="{'is-invalid': (user_view.username.touched || user_view.username.dirty) && user_view.username.invalid}" 
+                            [readOnly]="user_view_id != current_session"
+                            [disabled]="user_view_id != current_session"
+                            [required]="true">
+                            <div *ngIf="(user_view.username.touched || user_view.username.dirty) && user_view.username.invalid" class="text-danger">
                                 Formato de nombre de usuario inválido. Este campo solo acepta letras y números.
                             </div>     
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="email" class="form-label">Correo electrónico</label>
                             <input 
                             type="email" 
@@ -120,44 +155,15 @@
                             placeholder="Correo electrónico" 
                             class="form-control" 
                             #email="ngModel"
-                            [(ngModel)]="user_logged.email"
-                            [ngClass]="{'is-invalid': (user_logged.email.touched || user_logged.email.dirty) && user_logged.email.invalid}" 
-                            required>
+                            [(ngModel)]="user_view.email"
+                            [maxlength]="60"
+                            [ngClass]="{'is-invalid': (user_view.email.touched || user_view.email.dirty) && user_view.email.invalid}" 
+                            [readOnly]="user_view_id != current_session"
+                            [disabled]="user_view_id != current_session"
+                            [required]="true">
                         </div>
 
-                        <div class="col-6 mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input 
-                            type="password" 
-                            name="password" 
-                            placeholder="Contraseña" 
-                            class="form-control" 
-                            #password="ngModel"
-                            [(ngModel)]="user_logged.password"
-                            [ngClass]="{'is-invalid': (user_logged.password.touched || user_logged.password.dirty) && user_logged.password.invalid}" 
-                            required>
-                            <div *ngIf="(user_logged.password.touched || user_logged.password.dirty) && user_logged.password.invalid" class="text-danger">
-                                Formato de contraseña inválido. Asegúrate de que tu contraseña incluya al menos 8 caracteres, un número, y un símbolo.
-                            </div>     
-                        </div>
-
-                        <div class="col-6 mb-4">
-                            <label for="confirmed_password" class="form-label">Confirmar contraseña</label>
-                            <input 
-                            type="password" 
-                            name="confirmed_password" 
-                            placeholder="Confirmar contraseña" 
-                            class="form-control" 
-                            #confirmed_password_input="ngModel"
-                            [(ngModel)]="confirmed_password"
-                            [ngClass]="{'is-invalid': (confirmed_password_input.touched || confirmed_password_input.dirty) && confirmed_password != user_logged.password}" 
-                            required>
-                            <div *ngIf="(confirmed_password_input.touched || confirmed_password_input.dirty) && confirmed_password != user_logged.password" class="text-danger">
-                                Las contraseñas no coinciden.
-                            </div>     
-                        </div>
-
-                        <div class="col-12">
+                        <div class="col-12" *ngIf="user_view_id == current_session">
                             <button 
                             type="submit" 
                             class="btn btn-primary w-100"

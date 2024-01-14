@@ -47,15 +47,15 @@
                         </div>
                         <div class="col-6 mb-3">
                             <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" name="password" placeholder="Contraseña" class="form-control" #password="ngModel" [(ngModel)]="new_user.password" [ngClass]="{'is-invalid': password.touched && password.invalid}" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;<>,.?~])[A-Za-z\d!@#$%^&*()_+={}\[\]:;<>,.?~]{8,}$" required>
-                            <div *ngIf="password.touched && password.invalid" class="text-danger">
+                            <input type="password" name="password" placeholder="Contraseña" class="form-control" #passwordInput="ngModel" [(ngModel)]="password" [ngClass]="{'is-invalid': passwordInput.touched && passwordInput.invalid}" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;<>,.?~])[A-Za-z\d!@#$%^&*()_+={}\[\]:;<>,.?~]{8,}$" required>
+                            <div *ngIf="passwordInput.touched && passwordInput.invalid" class="text-danger">
                                 Formato de contraseña inválido. Asegúrate de que tu contraseña incluya al menos 8 caracteres, un número, y un símbolo.
                             </div>     
                         </div>
                         <div class="col-6 mb-3">
                             <label for="confirmed_password" class="form-label">Confirmar contraseña</label>
-                            <input type="password" name="confirmed_password" placeholder="Confirmar contraseña" class="form-control" [(ngModel)]="confirmed_password" [ngClass]="{'is-invalid': confirmed_password != '' && confirmed_password != new_user.password}" required>
-                            <div *ngIf="confirmed_password != '' && confirmed_password != new_user.password" class="text-danger">
+                            <input type="password" name="confirmed_password" placeholder="Confirmar contraseña" class="form-control" [(ngModel)]="confirmed_password" [ngClass]="{'is-invalid': confirmed_password != '' && confirmed_password != password}" required>
+                            <div *ngIf="confirmed_password != '' && confirmed_password != password" class="text-danger">
                                 Las contraseñas no coinciden.
                             </div>     
                         </div>

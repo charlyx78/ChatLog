@@ -12,10 +12,11 @@ import { SessionService } from '../../services/session/session.service';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-  public new_user: any;
+  public new_user: User;
   public current_session: any;
   public date: Date = new Date();
-  public confirmed_password: any;
+  protected password:  any;
+  protected confirmed_password:  any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -24,7 +25,8 @@ export class SignUpComponent implements OnInit {
     private session_service: SessionService
   ) {
     this.current_session = this.session_service.getSession();
-    this.new_user = new User("","",this.date,"","","","","","Desconectado",this.date);
+    this.new_user = new User("","",this.date,"","","","","Desconectado",this.date);
+    this.password = "";
     this.confirmed_password = "";
   }
 
@@ -37,10 +39,12 @@ export class SignUpComponent implements OnInit {
         this.new_user.gender != "" &&
         this.new_user.username != "" &&
         this.new_user.email != "" &&
-        this.new_user.password != "" && this.new_user.password == this.confirmed_password 
+        this.password != "" && this.password == this.confirmed_password 
       ) {
-        this.new_user.user_picture = await this.user_service.addUserPicture(this.new_user.user_picture);
-        let is_user_registrated: boolean = await this.user_service.addUser(this.new_user);
+        if(this.new_user.user_picture) {
+          this.new_user.user_picture = await this.user_service.addUserPicture(this.new_user.user_picture);
+        }
+        let is_user_registrated: boolean = await this.user_service.addUser(this.new_user, this.password);
         if(is_user_registrated) {
           form.reset();
           this._router.navigate(['/Login']);

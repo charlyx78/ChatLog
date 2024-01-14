@@ -13,7 +13,7 @@ const appRoutes: Routes = [
     {path: 'Login', component: LoginComponent},
     {path: 'SignUp', component: SignUpComponent},
     {path: 'Home', component: HomeComponent , children: [
-        {path: 'Account', component: AccountComponent},
+        {path: 'Account/:user_id', component: AccountComponent},
         {path: 'Chat', component: ChatComponent}
     ]},
     {path: 'Account', component: AccountComponent}

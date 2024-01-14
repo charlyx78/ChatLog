@@ -1,13 +1,18 @@
 .main-container-class {
     display: flex;
+
     .side-menu-class {
         width: 5vw;
         height: 100vh;
     }
+
     .page-container-class {
+        flex: 1; 
         width: 95vw;
+
         .page-content-class {
-            height: 91.4%;
+            box-sizing: border-box; 
+            height: calc(100% - 63px); //63px = Altura del navbar
         }
     }
 }

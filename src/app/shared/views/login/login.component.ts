@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private user_service: UserService,
     private session_service: SessionService
   ) {
-    this.user = new User("","",this.date,"","","","","","",this.date);
+    this.user = new User("","",this.date,"","","","","",this.date);
     this.current_session = this.session_service.getSession();
   }
 

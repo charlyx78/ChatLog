@@ -6,9 +6,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0 w-100 d-flex align-items-center">
                 <li class="w-100 h-100 py-2 pe-2">
-                    <form class="d-flex h-100" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                        <button class="btn btn-outline-dark" type="submit">Buscar</button>
+                    <form class="d-flex h-100" role="search" #searchForm="ngForm" (submit)="search(searchForm)">
+                        <input 
+                        name="search"
+                        type="search" 
+                        placeholder="Buscar" 
+                        aria-label="Search"
+                        class="form-control me-2"
+                        #searchInput="ngModel"
+                        [(ngModel)]="search_value"
+                        [ngClass]="{'is-invalid': (searchInput.touched || searchInput.dirty) && searchInput.invalid}"
+                        autocomplete="off"
+                        [required]="true">
+                        <button class="btn btn-outline-dark" type="submit" data-bs-toggle="modal" data-bs-target="#searchResultModal" [disabled]="searchForm.invalid">Buscar</button>
                     </form>
                 </li>
                 <div class="vr"></div>
@@ -17,14 +27,16 @@
                         <div class="position-relative me-2">
                             <div *ngIf="user_logged.user_picture; then image_uploaded else empty_image"></div>
 
+                            <!-- FOTO DE PERFIL -->
                             <ng-template #image_uploaded>
                                 <img src="{{ user_logged.user_picture }}" class="rounded-circle" width="30px" height="30px" alt="user picture">
                             </ng-template>
-
+                            
                             <ng-template #empty_image>
                                 <img src="../../../../assets/img/avatar.jpg" class="rounded-circle" width="30px" height="30px" alt="user picture">
                             </ng-template>
-
+                            
+                            <!-- ESTADOS DE CONEXION -->
                             <div *ngIf="user_logged.status_connection; then connected else disconnected"></div>
                             <ng-template #connected>
                                 <span class="position-absolute top-0 start-100 translate-middle p-2 rounded-circle bg-success" title="Conectad@"></span>  
@@ -37,7 +49,7 @@
                         {{ user_logged.username }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" [routerLink]="['/Home/Account']">Mi cuenta</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/Home/Account/', current_session]">Mi cuenta</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" (click)="logOut()">Cerrar sesión</a></li>
                     </ul>
@@ -45,4 +57,62 @@
             </ul>
         </div>
     </div>
-  </nav>
+</nav>
+
+<div class="modal fade" id="searchResultModal" aria-hidden="true" aria-labelledby="searchResultModalLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="searchResultModalLabel">Resultados para la búsqueda de: {{ search_value }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="search_result; then correct_search else empty_result"></div>
+                <ng-template #correct_search>
+                    <div class="card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-3">
+                                <div *ngIf="search_result.user_picture; then picture_available else picture_no_available"></div>
+    
+                                <ng-template #picture_available>
+                                    <div class="picture-search-result rounded-circle" style="background-image: url('{{ search_result.user_picture }}');"></div>
+                                </ng-template>
+                                
+                                <ng-template #picture_no_available>
+                                    <div class="picture-search-result rounded-circle" style="background-image: url('../../../../assets/img/avatar.jpg');"></div>
+                                </ng-template>
+    
+                                <div class="info-search-result">
+                                    <a [routerLink]="['/Home/Account/', search_result_id]" class="text-dark text-decoration-none" data-bs-dismiss="modal" aria-label="Close">
+                                        <h5 class="card-title">
+                                            {{ search_result.name + " " + search_result.last_name }}
+                                        </h5>
+                                    </a>
+                                    <p class="card-subtitle text-secondary">
+                                        {{ search_result.username }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <div *ngIf="friend_request_exists && current_session == friend_request_object[0].user_id_receiver; then acceptRequest else noRequest"></div>
+                                <ng-template #acceptRequest>
+                                    <button class="btn btn-success"><i class="bi bi-person-fill-check fs-4"></i></button>
+                                </ng-template>
+                                <ng-template #noRequest>
+                                    <button (click)="sendFriendRequest(current_session, search_result_id)" class="btn btn-primary"><i class="bi bi-person-add fs-4"></i></button>
+                                </ng-template>
+                                <button class="btn btn-primary"><i class="bi bi-chat-text fs-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #empty_result>
+                    <p class="text-center">
+                        <span class="text-secondary mb-4"><i class="bi bi-emoji-frown-fill fs-1"></i></span> <br>
+                        No se econtraron resultados para esta búsqueda</p>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+  

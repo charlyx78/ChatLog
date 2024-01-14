@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
-import { Observable, from } from 'rxjs';
+import { Observable, from, merge } from 'rxjs';
 
 import { SessionService } from '../session/session.service';
 
@@ -21,34 +21,60 @@ export class UserService {
     private session_service: SessionService
   ) { }
 
-  public addUser(user: User) {
-    return new Promise<boolean>((resolve, reject) => {
-      this.fireAuth.createUserWithEmailAndPassword(user.email, user.password)
-        .then((userRegistrated) => {
-          let current_dateTime = new Date();
-          user.registration_date = current_dateTime;
+  public addUser(user: User, password: string) {
+    return new Promise<boolean>(async (resolve, reject) => {
 
-          this.fireStore.collection("Usuarios").doc(userRegistrated.user?.uid).set(this.serializeUser(user));
-          alert("¡Usuario registrado exitosamente!");
-          resolve(true);
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          alert(errorMessage);
-          resolve(false);
-        });
+      let username_exists = await this.usernameExists(user.username);
+      if(!username_exists) {
+        this.fireAuth.createUserWithEmailAndPassword(user.email, password)
+          .then((userRegistrated) => {
+            let current_dateTime = new Date();
+            user.registration_date = current_dateTime;
+  
+            this.fireStore.collection("Usuarios").doc(userRegistrated.user?.uid).set(this.serializeUser(user), {merge: true});
+            alert("¡Usuario registrado exitosamente!");
+            resolve(true);
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            alert(errorMessage);
+            resolve(false);
+          });
+      }
+      else {
+        alert("Nombre de usuario ya existente. por favor, intenta con otro.")
+      }
     })
   }
 
   public addUserPicture(file: any) {
     return new Promise<string>((resolve,reject) => {
       if(file) {
-        this.fireStorage.ref(this.storagePath + file.name).put(file).then((snapshot) => {
+        this.fireStorage.ref(this.storagePath + file.name).put(file)
+        .then((snapshot) => {
           snapshot.ref.getDownloadURL().then(downloadURL => {
             resolve(downloadURL);
           })
-        });
+        })
       }
+    })
+  }
+
+  public usernameExists(username: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.fireStore.collection("Usuarios").ref.where("username", "==", username).get()
+      .then((user) => {
+        if(!user.empty){
+          resolve(true);
+        }
+        else {
+          resolve(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        resolve(false);
+      });   
     })
   }
 
@@ -146,7 +172,6 @@ export class UserService {
           gender: user.gender,
           username: user.username,
           email: user.email,
-          password: user.password,
           user_picture: user.user_picture,
           status_connection: user.status_connection,
           registration_date: user.registration_date        
