@@ -51,9 +51,9 @@
                             <button type="submit" class="btn btn-outline-secondary">Guardar foto</button>
                         </div>
 
-                        <div *ngIf="user_view_id != current_session" class="d-flex flex-column gap-2">
-                            <button class="btn btn-primary">Agregar amigo <i class="bi bi-person-add ms-2"></i></button>
-                            <button class="btn btn-primary">Enviar mensaje <i class="bi bi-chat-text ms-2"></i></button>
+                        <div *ngIf="user_view_id != current_session" class="d-flex align-items-center gap-2">
+                            <app-friend-request-button [user_view_id]="user_view_id"></app-friend-request-button>
+                            <button class="btn btn-primary d-flex align-items-center justify-content-center gap-2">Enviar mensaje<i class="bi bi-chat-text"></i></button>
                         </div>
                     </div>
                 </form>

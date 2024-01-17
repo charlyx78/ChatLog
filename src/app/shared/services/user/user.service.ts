@@ -135,7 +135,7 @@ export class UserService {
           resolve(true);
         })
         .catch((error) => {
-          resolve(false);
+          reject(error);
         })
     })
   }
@@ -147,7 +147,7 @@ export class UserService {
           resolve(true);
         })
         .catch((error) => {
-          resolve(false);
+          reject(error);
         })
     })
   }
@@ -159,7 +159,7 @@ export class UserService {
           resolve(true);
         })
         .catch((error) => {
-          resolve(false);
+          reject(error);
         })
     })
   }

@@ -21,6 +21,7 @@ import { SideMenuComponent } from './shared/views/side-menu/side-menu.component'
 import { AccountComponent } from './shared/views/account/account.component';
 import { ChatComponent } from './shared/views/chat/chat.component';
 import { FriendsChatsComponent } from './shared/views/friends-chats/friends-chats.component';
+import { FriendRequestButtonComponent } from './shared/views/friend-request-button/friend-request-button.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { FriendsChatsComponent } from './shared/views/friends-chats/friends-chat
     SideMenuComponent,
     AccountComponent,
     ChatComponent,
-    FriendsChatsComponent
+    FriendsChatsComponent,
+    FriendRequestButtonComponent
   ],
   imports: [
     BrowserModule,
