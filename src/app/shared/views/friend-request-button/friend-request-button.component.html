@@ -1,20 +1,20 @@
 <div 
 *ngIf="
-    friend_request_exists; 
+    friend_request.exists; 
 then exists
 else dontExists"></div>
 
 <ng-template #exists>
     <div
     *ngIf="
-        current_session == friend_request_object?.user_id_receiver;
+        current_session == friend_request.object?.user_id_receiver;
     then receiver
     else noReceiver"></div>
 
     <ng-template #receiver>
         <div 
         *ngIf="
-            friend_request_object?.friend_request_status == 'Pending';
+            friend_request.object?.friend_request_status == 'Pending';
         then pending
         else noPending"></div>
 
@@ -33,12 +33,21 @@ else dontExists"></div>
 
         <ng-template #noPending>
             <div *ngIf="
-                friend_request_object?.friend_request_status == 'Accepted';
+                friend_request.object?.friend_request_status == 'Accepted';
             then accepted
             else rejected"></div>
 
             <ng-template #accepted>
-                <p class="text-muted me-2" *ngIf="friendship_date">Amigos desde: <br> {{ friendship_date.toDate().toLocaleDateString('es-ES', { month: 'long', year: 'numeric', day: 'numeric' }) }}</p>
+                <div class="btn-group dropup w-100">
+                    <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center justify-content-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
+                        Amigos
+                        <i class="bi bi-person-check-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <!-- <li><a class="dropdown-item" (click)="acceptFriendRequest()">Aceptar</a></li>
+                        <li><a class="dropdown-item" href="#">Rechazar</a></li> -->
+                    </ul>
+                </div>
             </ng-template>
 
             <ng-template #rejected>
@@ -51,7 +60,7 @@ else dontExists"></div>
     <ng-template #noReceiver>
         <div 
         *ngIf="
-            friend_request_object?.friend_request_status == 'Pending';
+            friend_request.object?.friend_request_status == 'Pending';
         then pending else noPending"></div>
     
         <ng-template #pending>
@@ -60,16 +69,25 @@ else dontExists"></div>
     
         <ng-template #noPending>
             <div 
-            *ngIf="friend_request_exists &&
-                friend_request_object?.friend_request_status == 'Accepted';
+            *ngIf="friend_request.exists &&
+                friend_request.object?.friend_request_status == 'Accepted';
             then accepted else rejected"></div>
     
             <ng-template #accepted>
-                <p class="text-muted me-2" *ngIf="friendship_date">Amigos desde: <br> {{ friendship_date.toDate().toLocaleDateString('es-ES', { month: 'long', year: 'numeric', day: 'numeric' }) }}</p>
+                <div class="btn-group dropup w-100">
+                    <button type="button" class="btn btn-primary dropdown-toggle d-flex align-items-center justify-content-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
+                        Amigos
+                        <i class="bi bi-person-check-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <!-- <li><a class="dropdown-item" (click)="acceptFriendRequest()">Aceptar</a></li>
+                        <li><a class="dropdown-item" href="#">Rechazar</a></li> -->
+                    </ul>
+                </div>
             </ng-template>
     
             <ng-template #rejected>
-                <p>solicitud rechazada</p>
+                <p></p>
             </ng-template>
 
         </ng-template>

@@ -76,7 +76,7 @@ export class FriendService {
   friendRequestExists(user_id_sender: any, user_id_receiver: any): Observable<any> {
     return this.fireStore.collection("SolicitudesDeAmistad", ref =>
         ref.where("user_id_sender", "in", [user_id_sender, user_id_receiver])
-           .where("user_id_receiver", "in", [user_id_sender, user_id_receiver])
+           .where("user_id_receiver", "in", [user_id_receiver, user_id_sender])
     )
     .valueChanges({ idField: 'id' });
   }
