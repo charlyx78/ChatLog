@@ -1,5 +1,5 @@
 <div class="container-fluid py-4">
-    <div *ngIf= "is_friends_list_loaded; then friends_list_view else loading_view"></div>
+    <div *ngIf="is_friends_list_loaded; then friends_list_view else loading_view"></div>
     
     <ng-template #loading_view>
         <div class="w-100 h-100 d-flex justify-content-center">
