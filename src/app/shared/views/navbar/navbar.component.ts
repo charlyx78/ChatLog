@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
   ) {
     this.current_session = this.session_service.getSession();
     this.user_service.getUserById(this.current_session).then((user) => {
-      this.user_logged = user;
+      this.user_logged = user.object;
     });
     this.search_value = "";
     this.search_result = "";

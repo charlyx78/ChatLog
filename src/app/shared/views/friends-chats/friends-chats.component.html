@@ -1,3 +1,42 @@
 <div class="container-fluid py-4">
-    <p>friends-chats works!</p>
+    <div *ngIf= "is_friends_list_loaded; then friends_list_view else loading_view"></div>
+    
+    <ng-template #loading_view>
+        <div class="w-100 h-100 d-flex justify-content-center">
+            <div class="spinner-grow mt-5" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Cargando, por favor espera...</span>
+            </div>
+        </div>
+    </ng-template>
+    
+    <ng-template #friends_list_view>
+        <ul class="list-group">
+        <h5 class="list-group-item border-0 bg-transparent mb-3">Contactos</h5>
+        <div *ngFor="let friend of friends_array">
+            <a [routerLink]="['/Home/Chat/', friend.id]" class="friend-list-contact rounded list-group-item list-group-item-action mb-2 border-0 bg-transparent d-flex justify-content-between align-items-center" >
+                <div class="d-flex align-items-center gap-4">
+                    <div *ngIf="friend.data.user_picture; then user_picture_available else user_picture_unavailable"></div>
+                    <ng-template #user_picture_available>
+                        <div class="user-picture-contact rounded-circle" style="background-image: url('{{ friend.data.user_picture }}');">
+                        </div>
+                    </ng-template>
+                    <ng-template #user_picture_unavailable>
+                        <div class="user-picture-contact rounded-circle border" style="background-image: url('../../../../assets/img/avatar.jpg');"></div>
+                    </ng-template>
+        
+                    <p class="m-0">{{ friend.data.username }}</p>
+                </div>
+
+                <div *ngIf="friend.data.status_connection == 'Connected'; then user_connected else user_disconnected"></div>
+                <ng-template #user_connected>
+                    <span class="p-2 rounded-circle bg-success" title="Conectad@"></span>  
+                </ng-template>
+                <ng-template #user_disconnected>
+                    <span class="p-2 rounded-circle bg-danger" title="Desconectad@"></span>  
+                </ng-template>
+            </a>
+        </div>
+        </ul>
+    </ng-template>
+
 </div>

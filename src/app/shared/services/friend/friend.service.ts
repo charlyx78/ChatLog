@@ -3,7 +3,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FriendRequest } from '../../models/FriendRequest';
 import { Friend } from '../../models/Friend';
 import { query } from '@angular/animations';
-import { Observable, take } from 'rxjs';
+import { Observable, take, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -54,24 +55,38 @@ export class FriendService {
     })          
   }
 
-  getFriendShipData(user_id_1: any, user_id_2: any) {
-    return new Promise<any>(async (resolve, reject) => {
-      this.fireStore.collection("Amigos").ref
-      .where("user_id_1", "in", [user_id_1, user_id_2])
-      .where("user_id_2", "in", [user_id_1, user_id_2])
-      .get()
-      .then(querySnapshot => {
-        if(!querySnapshot.empty) {
-          let friendship_request_object = querySnapshot.docs.map(doc => {
-            return { 
-              data: doc.data() 
-            };
-          });
-          resolve(friendship_request_object[0]);
-        }
-      })
-    })
+  getFriendList(current_session: string) {
+    const query1 = this.fireStore.collection("Amigos", ref =>
+      ref.where("user_id_1", "==", current_session)
+    ).valueChanges({ idField: 'id' });
+
+    const query2 = this.fireStore.collection("Amigos", ref =>
+      ref.where("user_id_2", "==", current_session)
+    ).valueChanges({ idField: 'id' });
+
+    return combineLatest([query1, query2]).pipe(
+      map(([result1, result2]) => [...result1 as Friend[], ...result2 as Friend[]])
+    );
   }
+
+  // getFriendShipData(user_id_1: any, user_id_2: any) {
+  //   return new Promise<any>(async (resolve, reject) => {
+  //     this.fireStore.collection("Amigos").ref
+  //     .where("user_id_1", "in", [user_id_1, user_id_2])
+  //     .where("user_id_2", "in", [user_id_1, user_id_2])
+  //     .get()
+  //     .then(querySnapshot => {
+  //       if(!querySnapshot.empty) {
+  //         let friendship_request_object = querySnapshot.docs.map(doc => {
+  //           return { 
+  //             data: doc.data() 
+  //           };
+  //         });
+  //         resolve(friendship_request_object[0]);
+  //       }
+  //     })
+  //   })
+  // }
 
   friendRequestExists(user_id_sender: any, user_id_receiver: any): Observable<any> {
     return this.fireStore.collection("SolicitudesDeAmistad", ref =>

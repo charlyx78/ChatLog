@@ -33,8 +33,7 @@ export class LoginComponent implements OnInit {
           this.user_service.setUserStatusConnection(logged.user_id, "Connected");
           this._router.navigate(['/Home']);
         } 
-      });
-        
+      }); 
     }
     catch(error) {
       alert(error);

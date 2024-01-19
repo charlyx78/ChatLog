@@ -14,7 +14,8 @@ const appRoutes: Routes = [
     {path: 'SignUp', component: SignUpComponent},
     {path: 'Home', component: HomeComponent , children: [
         {path: 'Account/:user_id', component: AccountComponent},
-        {path: 'Chat', component: ChatComponent}
+        {path: 'Chat', component: ChatComponent},
+        {path: 'Chat/:user_id', component: ChatComponent}
     ]},
     {path: 'Account', component: AccountComponent}
 ];

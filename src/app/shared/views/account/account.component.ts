@@ -29,7 +29,7 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
     const fetchUserData = async (userId: string) => {
       const user = await this.user_service.getUserById(userId);
-      this.user_view = this.user_service.serializeUser(user);
+      this.user_view = this.user_service.serializeUser(user.object);
     };
     this.user_view_id = this._route.snapshot.params["user_id"];
     fetchUserData(this.user_view_id);

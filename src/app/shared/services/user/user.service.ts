@@ -123,7 +123,7 @@ export class UserService {
   public getUserById(user_id: string) {
     return new Promise<any>((resolve, reject) => {
       this.fireStore.collection("Usuarios").doc(user_id).get().subscribe((user)=> {
-        resolve(user.data());
+        resolve({id: user.id, object: user.data()});
       });
     }) 
   }
